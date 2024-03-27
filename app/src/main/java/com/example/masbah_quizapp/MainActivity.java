@@ -1,49 +1,70 @@
 package com.example.masbah_quizapp;
 
-import androidx.appcompat.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.content.Intent;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
-    // STEP 1: Declaration of variables
-     EditText etLogin, etPassword;
-     Button bLogin;
-     TextView tvRegister;
+    EditText etLogin, etPassword;
+    Button bLogin;
+    TextView tvRegister;
+    private FirebaseAuth mAuth;
     private boolean doubleBackToExitPressedOnce = false;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // STEP 2: Recuperation des Ids
-        etLogin= findViewById(R.id.etMail);
-        etPassword= findViewById(R.id.etPassword);
-        bLogin= findViewById(R.id.bLogin);
-        tvRegister= findViewById(R.id.tvRegister);
+        etLogin = findViewById(R.id.etMail);
+        etPassword = findViewById(R.id.etPassword);
+        bLogin = findViewById(R.id.bLogin);
+        tvRegister = findViewById(R.id.tvRegister);
 
-        // STEP 3: Creation of the listener
+        mAuth = FirebaseAuth.getInstance();
+
         bLogin.setOnClickListener(view -> {
-            // STEP 4: Action to be performed
-            if (etLogin.getText().toString().equals("toto") && etPassword.getText().toString().equals("123")){
-                startActivity(new Intent(MainActivity.this, Quiz1.class));
-            }
-            else {
-                Toast.makeText(getApplicationContext(),"Login or password incorrect !",Toast.LENGTH_SHORT).show();
+            String email = etLogin.getText().toString();
+            String password = etPassword.getText().toString();
+
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(MainActivity.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            } else {
+                loginUser(email, password);
             }
         });
+
         tvRegister.setOnClickListener(view -> {
-            // STEP 4: Traitement
             startActivity(new Intent(MainActivity.this, Register.class));
         });
+    }
+
+    private void loginUser(String email, String password) {
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        Toast.makeText(MainActivity.this, "Authentication successful.",
+                                Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(MainActivity.this, Quiz1.class));
+                        finish();
+                    } else {
+                        Toast.makeText(MainActivity.this, "Authentication failed.",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     @Override

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1077509655848",
+    "project_id": "quizapp-masbah",
+    "storage_bucket": "quizapp-masbah.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1077509655848:android:9f0a0cc9ad8e3fab43541d",
+        "android_client_info": {
+          "package_name": "com.example.masbah_quizapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCaF-tGN6U10YJeYWOodsM74Gmce47a3t4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
