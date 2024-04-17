@@ -1,82 +1,80 @@
-package com.example.masbah_quizapp;
+    package com.example.masbah_quizapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
+import android.text.TextUtils;
+import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
+TextInputEditText editTextEmail, editTextPassword;
+Button signIn;
+TextView signUp;
+FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
-    EditText etLogin, etPassword;
-    Button bLogin;
-    TextView tvRegister;
-    private FirebaseAuth mAuth;
-    private boolean doubleBackToExitPressedOnce = false;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        etLogin = findViewById(R.id.etMail);
-        etPassword = findViewById(R.id.etPassword);
-        bLogin = findViewById(R.id.bLogin);
-        tvRegister = findViewById(R.id.tvRegister);
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    EdgeToEdge.enable(this);
+    setContentView(R.layout.activity_main);
+    editTextEmail = findViewById(R.id.email);
+    editTextPassword = findViewById(R.id.password);
+    signIn = findViewById(R.id.sign_in);
+    signUp = findViewById(R.id.sign_up);
 
-        mAuth = FirebaseAuth.getInstance();
+    signUp.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(MainActivity.this, Register.class);
+            startActivity(intent);
+            finish();
+        }
+    });
 
-        bLogin.setOnClickListener(view -> {
-            String email = etLogin.getText().toString();
-            String password = etPassword.getText().toString();
-
-            if (email.isEmpty() || password.isEmpty()) {
-                Toast.makeText(MainActivity.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
-            } else {
-                loginUser(email, password);
-            }
-        });
-
-        tvRegister.setOnClickListener(view -> {
-            startActivity(new Intent(MainActivity.this, Register.class));
-        });
-    }
-
-    private void loginUser(String email, String password) {
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, task -> {
-                    if (task.isSuccessful()) {
-                        FirebaseUser user = mAuth.getCurrentUser();
-                        Toast.makeText(MainActivity.this, "Authentication successful.",
-                                Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(MainActivity.this, Quiz1.class));
-                        finish();
-                    } else {
-                        Toast.makeText(MainActivity.this, "Authentication failed.",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
-            super.onBackPressed();
+    signIn.setOnClickListener(v -> {
+        String email, password;
+        email = String.valueOf(editTextEmail.getText());
+        password = String.valueOf(editTextPassword.getText());
+        if (TextUtils.isEmpty(email)) {
+            Toast.makeText(MainActivity.this, "Enter Email", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(password)) {
+            Toast.makeText(MainActivity.this, "Enter Password", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(MainActivity.this, HomePage.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Toast.makeText(MainActivity.this, "Invalid Email or Password", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    });
 
-        new Handler(Looper.getMainLooper()).postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
-    }
+}
 }
