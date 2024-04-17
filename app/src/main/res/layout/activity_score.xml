@@ -1,65 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Score"
     android:orientation="vertical"
-    android:layout_margin="25dp"
-    >
+    android:background="@drawable/screen"
+    android:padding="16dp">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:src="@drawable/logoo"/>
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Votre score est :"
-        android:textSize="25dp"
-        android:textStyle="bold"
-        android:layout_gravity="center"
-        />
+        android:id="@+id/scoreTextView"
+        android:layout_width="383dp"
+        android:layout_height="361dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="Score: 0"
+        android:textSize="18sp" />
+
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="50%"
-        android:textSize="40dp"
-        android:textStyle="bold"
-        android:textColor="@color/teal_700"
-        android:layout_gravity="center"
-        android:id="@+id/tvScore"
-        />
 
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="match_parent"
-        android:layout_height="228dp" />
-
-
-    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="Logout"
-            android:id="@+id/bLogout"/>
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="Try again"
-            android:id="@+id/bTry"/>
-    </LinearLayout>
-
-
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="Thanks for ur Time"
+        android:textSize="18sp" />
 
 </LinearLayout>
-
